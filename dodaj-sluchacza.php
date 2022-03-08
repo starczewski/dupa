@@ -102,6 +102,23 @@ if(isset($_REQUEST['submition']) and $_REQUEST['submition']!=""){
 		header('location:'.$_SERVER['PHP_SELF'].'?msg=na');
 		exit;	
 	}else{
+		$users	=	$db->getQueryCount('firmy','id');
+		if($users[0]['total']<100000){
+			$da	=	array(
+							'nazwa'=>$nazwa,
+							'opis'=>$opis,
+							'nip'=>$nip,
+							'kod_pocztowy'=>$kod_pocztowy,
+							'miasto'=>$miasto,
+							'ulica'=>$ulica,
+							'nr_telefonu'=>$nr_telefonu,
+							'email'=>$email,
+							'www'=>$www,
+						);			
+					
+			$insert	=	$db->insert('firmy',$da);
+			$lastid = $db->lastInsertId();
+
 		$userCount	=	$db->getQueryCount('sluchacze','id');
 		if($userCount[0]['total']<100000){
 			$data	=	array(
@@ -113,7 +130,7 @@ if(isset($_REQUEST['submition']) and $_REQUEST['submition']!=""){
 							'dataur'=>$dataur,
 							'pesel'=>$pesel,
 							'adreszam'=>$adreszam,
-							'firma'=>$firma,
+							'firma'=>$lastid,
 							'nrtelefonu'=>$nrtelefonu,
 							'email'=>$email,
 						);
@@ -134,21 +151,6 @@ if(isset($_REQUEST['submition']) and $_REQUEST['submition']!=""){
 						);		
 			$insert	=	$db->insert('przydziel',$dat);	
 						
-			$users	=	$db->getQueryCount('firmy','id');
-		if($users[0]['total']<100000){
-			$da	=	array(
-							'nazwa'=>$nazwa,
-							'opis'=>$opis,
-							'nip'=>$nip,
-							'kod_pocztowy'=>$kod_pocztowy,
-							'miasto'=>$miasto,
-							'ulica'=>$ulica,
-							'nr_telefonu'=>$nr_telefonu,
-							'email'=>$email,
-							'www'=>$www,
-						);			
-					
-			$insert	=	$db->insert('firmy',$da);
 			if($insert){
 				header('location:lista-sluchaczy.php?Id='.$_GET['Id']);
 				exit;
